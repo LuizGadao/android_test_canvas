@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Random;
+
 import br.com.luizgadao.testwithcanvas.utils.MetricsUtils;
 
 /**
@@ -15,9 +17,8 @@ import br.com.luizgadao.testwithcanvas.utils.MetricsUtils;
 
 public class TwoBalls extends View {
 
-    private Ball mRedBall;
-    private Ball mBlueBall;
-    private Paint mPaintYellow;
+    int maxBall = 70;
+    private Ball[] mBalls = new Ball[maxBall];
 
     public TwoBalls(Context context) {
         super(context);
@@ -31,65 +32,76 @@ public class TwoBalls extends View {
 
     private void init() {
         setBackgroundColor(Color.LTGRAY);
-        mPaintYellow = new Paint();
-        mPaintYellow.setColor(Color.YELLOW);
-
-        Paint mBgRed = new Paint();
-        mBgRed.setARGB(200, 255, 0, 0);
-
-        Paint mBgBlue = new Paint();
-        mBgRed.setARGB(130, 20, 40, 230);
-
         Context mContext = getContext();
-        mRedBall = new Ball(10, 0,
-                MetricsUtils.toPixel(mContext, 30),
-                MetricsUtils.toPixel(mContext, 20),
-                MetricsUtils.toPixel(mContext, 200),
-                MetricsUtils.toPixel(mContext, 200),
-                mBgRed
-        );
 
-        mBlueBall = new Ball(12, 180,
-                MetricsUtils.toPixel(mContext, 20),
-                MetricsUtils.toPixel(mContext, 24),
-                MetricsUtils.toPixel(mContext, 180),
-                MetricsUtils.toPixel(mContext, 150),
-                mBgBlue
-        );
+        for (int i = 0; i < mBalls.length; i++) {
+            Ball mBall = new Ball(getRandom(3, 18), 0,
+                    MetricsUtils.toPixel(mContext, getRandom(10, 35)),
+                    MetricsUtils.toPixel(mContext, getRandom(4, 22)),
+                    MetricsUtils.toPixel(mContext, getRandom(40, 430)),
+                    MetricsUtils.toPixel(mContext, getRandom(40, 230)),
+                    getRandomColor()
+            );
+
+            mBalls[i] = mBall;
+        }
 
         setFocusable(true);
+    }
+
+    private float getRandom(float minValue, float maxValue){
+        Random random = new Random();
+        return (float) (random.nextDouble() * (maxValue -  minValue)) + minValue;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawCircle(
-                mRedBall.mPosX,
-                mRedBall.mPosY,
-                mRedBall.mRadius,
-                mRedBall.mPaint
-        );
+        int len = mBalls.length;
+        int lastButOne = mBalls.length -1;
+        for (int i = 0; i < len; i++){
+            float mCurrentBallX = mBalls[i].mPosX;
+            float mCurrentBallY = mBalls[i].mPosY;
+            canvas.drawCircle(
+                    mCurrentBallX,
+                    mCurrentBallY,
+                    mBalls[i].mRadius,
+                    mBalls[i].mPaint
+            );
 
-        canvas.drawCircle(
-                mBlueBall.mPosX,
-                mBlueBall.mPosY,
-                mBlueBall.mRadius,
-                mBlueBall.mPaint
-        );
-
-        canvas.drawLine(mRedBall.mPosX, mRedBall.mPosY, mBlueBall.mPosX, mBlueBall.mPosY, mPaintYellow);
+            if (i < lastButOne) {
+                int next = i + 1;
+                canvas.drawLine(
+                        mCurrentBallX,
+                        mCurrentBallY,
+                        mBalls[next].mPosX,
+                        mBalls[next].mPosY,
+                        mBalls[i].mPaint
+                );
+            }
+        }
     }
 
     public void update(){
-        mRedBall.update();
-        mBlueBall.update();
+        int len = mBalls.length;
+        for (int i = 0; i < len; i++)
+            mBalls[i].update();
+
         invalidate();
     }
 
+    public Paint getRandomColor() {
+        Paint mPaint = new Paint();
+        mPaint.setARGB(255,
+                (int) getRandom(0, 255),
+                (int) getRandom(0, 255),
+                (int) getRandom(0, 255)
+        );
+        return mPaint;
+    }
 
     class Ball implements Moveable{
-
         float mSpeed;
         float mAngle;
         float mAngleMove;
@@ -98,7 +110,6 @@ public class TwoBalls extends View {
         float mPosX;
         float mPosY;
         Paint mPaint;
-
         private double mRadians;
 
         public Ball(float speed, float angle, float radius, float radiusMove, float posX, float posY, Paint paint) {
@@ -112,11 +123,9 @@ public class TwoBalls extends View {
         }
 
         public void update(){
-
             mRadians = Math.toRadians(mAngleMove);
             this.mPosX = (float) (mPosX + mRadiusMove * Math.cos(mRadians));
             this.mPosY = (float) (mPosY + mRadiusMove * Math.sin(mRadians));
-
 
             mAngleMove += mSpeed;
             mAngleMove %= 360;

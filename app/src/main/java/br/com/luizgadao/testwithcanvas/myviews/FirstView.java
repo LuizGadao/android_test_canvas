@@ -56,12 +56,12 @@ public class FirstView extends View{
 
         Context context = getContext();
         canvas.drawRect(
-                MetricsUtils.toPixel(context, mX),
-                MetricsUtils.toPixel(context, mY),
-                MetricsUtils.toPixel(context, 100),
-                MetricsUtils.toPixel(context, 100),
+                MetricsUtils.dpToPixel(context, mX),
+                MetricsUtils.dpToPixel(context, mY),
+                MetricsUtils.dpToPixel(context, 100),
+                MetricsUtils.dpToPixel(context, 100),
                 bluePaint);
-        canvas.drawLine(MetricsUtils.toPixel(context, 100), MetricsUtils.toPixel(context, 100), MetricsUtils.toPixel(context, 200), MetricsUtils.toPixel(context, 200), blackPaint);
-        canvas.drawCircle(MetricsUtils.toPixel(context, 200), MetricsUtils.toPixel(context, 200), MetricsUtils.toPixel(context, 50), redPaint);
+        canvas.drawLine(MetricsUtils.dpToPixel(context, 100), MetricsUtils.dpToPixel(context, 100), MetricsUtils.dpToPixel(context, 200), MetricsUtils.dpToPixel(context, 200), blackPaint);
+        canvas.drawCircle(MetricsUtils.dpToPixel(context, 200), MetricsUtils.dpToPixel(context, 200), MetricsUtils.dpToPixel(context, 50), redPaint);
     }
 }

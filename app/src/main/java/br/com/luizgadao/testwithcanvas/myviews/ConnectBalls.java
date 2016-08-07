@@ -20,15 +20,15 @@ public class ConnectBalls extends View implements Moveable{
 
     int maxBall = 100;
     private Ball[] mBalls = new Ball[maxBall];
+    private float height;
+    private float width;
 
     public ConnectBalls(Context context) {
         super(context);
-        init();
     }
 
     public ConnectBalls(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     private void init() {
@@ -37,10 +37,10 @@ public class ConnectBalls extends View implements Moveable{
 
         for (int i = 0; i < mBalls.length; i++) {
             Ball mBall = new Ball(getRandom(3, 18), 0,
-                    MetricsUtils.toPixel(mContext, getRandom(10, 35)),
-                    MetricsUtils.toPixel(mContext, getRandom(4, 155)),
-                    MetricsUtils.toPixel(mContext, getRandom(40, 430)),
-                    MetricsUtils.toPixel(mContext, getRandom(40, 230)),
+                    MetricsUtils.dpToPixel(mContext, getRandom(10, 35)),
+                    MetricsUtils.dpToPixel(mContext, getRandom(4, 155)),
+                    MetricsUtils.dpToPixel(mContext, getRandom(40, width)),
+                    MetricsUtils.dpToPixel(mContext, getRandom(40, height)),
                     getRandomColor()
             );
 
@@ -82,6 +82,17 @@ public class ConnectBalls extends View implements Moveable{
                 );
             }
         }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int h = getMeasuredHeight();
+        int w = getMeasuredWidth();
+        setMeasuredDimension(w, h);
+        width = MetricsUtils.pixelToDp(getContext(), w);
+        height = MetricsUtils.pixelToDp(getContext(), h);
+        init();
     }
 
     @Override

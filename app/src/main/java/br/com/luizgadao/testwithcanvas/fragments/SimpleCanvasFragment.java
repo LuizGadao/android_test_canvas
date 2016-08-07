@@ -12,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import br.com.luizgadao.testwithcanvas.R;
-import br.com.luizgadao.testwithcanvas.myviews.TwoBalls;
+import br.com.luizgadao.testwithcanvas.myviews.ConnectBalls;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +20,7 @@ import br.com.luizgadao.testwithcanvas.myviews.TwoBalls;
 public class SimpleCanvasFragment extends Fragment {
 
 
-    TwoBalls mTwoBallsView;
+    ConnectBalls mTwoBallsView;
 
     public SimpleCanvasFragment() {
         // Required empty public constructor
@@ -42,7 +42,7 @@ public class SimpleCanvasFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTwoBallsView = (TwoBalls) view.findViewById(R.id.twoBalls);
+        mTwoBallsView = (ConnectBalls) view.findViewById(R.id.twoBalls);
 
         TimerTask mTimerTask = new TimerTask() {
             @Override

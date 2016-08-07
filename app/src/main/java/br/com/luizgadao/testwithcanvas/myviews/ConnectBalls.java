@@ -9,23 +9,24 @@ import android.view.View;
 
 import java.util.Random;
 
+import br.com.luizgadao.testwithcanvas.particles.Moveable;
 import br.com.luizgadao.testwithcanvas.utils.MetricsUtils;
 
 /**
  * Created by Luiz on 05/08/16.
  */
 
-public class TwoBalls extends View {
+public class ConnectBalls extends View implements Moveable{
 
-    int maxBall = 70;
+    int maxBall = 100;
     private Ball[] mBalls = new Ball[maxBall];
 
-    public TwoBalls(Context context) {
+    public ConnectBalls(Context context) {
         super(context);
         init();
     }
 
-    public TwoBalls(Context context, AttributeSet attrs) {
+    public ConnectBalls(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -37,7 +38,7 @@ public class TwoBalls extends View {
         for (int i = 0; i < mBalls.length; i++) {
             Ball mBall = new Ball(getRandom(3, 18), 0,
                     MetricsUtils.toPixel(mContext, getRandom(10, 35)),
-                    MetricsUtils.toPixel(mContext, getRandom(4, 22)),
+                    MetricsUtils.toPixel(mContext, getRandom(4, 155)),
                     MetricsUtils.toPixel(mContext, getRandom(40, 430)),
                     MetricsUtils.toPixel(mContext, getRandom(40, 230)),
                     getRandomColor()
@@ -61,13 +62,13 @@ public class TwoBalls extends View {
         int len = mBalls.length;
         int lastButOne = mBalls.length -1;
         for (int i = 0; i < len; i++){
-            float mCurrentBallX = mBalls[i].mPosX;
-            float mCurrentBallY = mBalls[i].mPosY;
+            float mCurrentBallX = mBalls[i].getPosX();
+            float mCurrentBallY = mBalls[i].getmPosY();
             canvas.drawCircle(
                     mCurrentBallX,
                     mCurrentBallY,
                     mBalls[i].mRadius,
-                    mBalls[i].mPaint
+                    mBalls[i].getPaint()
             );
 
             if (i < lastButOne) {
@@ -75,14 +76,15 @@ public class TwoBalls extends View {
                 canvas.drawLine(
                         mCurrentBallX,
                         mCurrentBallY,
-                        mBalls[next].mPosX,
-                        mBalls[next].mPosY,
-                        mBalls[i].mPaint
+                        mBalls[next].getPosX(),
+                        mBalls[next].getmPosY(),
+                        mBalls[i].getPaint()
                 );
             }
         }
     }
 
+    @Override
     public void update(){
         int len = mBalls.length;
         for (int i = 0; i < len; i++)
@@ -99,40 +101,5 @@ public class TwoBalls extends View {
                 (int) getRandom(0, 255)
         );
         return mPaint;
-    }
-
-    class Ball implements Moveable{
-        float mSpeed;
-        float mAngle;
-        float mAngleMove;
-        float mRadius;
-        float mRadiusMove;
-        float mPosX;
-        float mPosY;
-        Paint mPaint;
-        private double mRadians;
-
-        public Ball(float speed, float angle, float radius, float radiusMove, float posX, float posY, Paint paint) {
-            this.mSpeed = speed;
-            this.mAngle = angle;
-            this.mRadius = radius;
-            this.mRadiusMove = radiusMove;
-            this.mPosX = posX;
-            this.mPosY = posY;
-            this.mPaint = paint;
-        }
-
-        public void update(){
-            mRadians = Math.toRadians(mAngleMove);
-            this.mPosX = (float) (mPosX + mRadiusMove * Math.cos(mRadians));
-            this.mPosY = (float) (mPosY + mRadiusMove * Math.sin(mRadians));
-
-            mAngleMove += mSpeed;
-            mAngleMove %= 360;
-        }
-    }
-
-    interface Moveable{
-        void update();
     }
 }

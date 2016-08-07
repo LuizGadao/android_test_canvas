@@ -8,7 +8,7 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent" />-->
 
-    <br.com.luizgadao.testwithcanvas.myviews.TwoBalls
+    <br.com.luizgadao.testwithcanvas.myviews.ConnectBalls
         android:id="@+id/twoBalls"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
